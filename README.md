@@ -1,1 +1,1 @@
-# wpyscan
+![WPyScan](wpyscan_banner.png)
