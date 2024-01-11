@@ -1,4 +1,5 @@
 import requests
+from user_agents import get_random_user_agent
 
 class UserPosts:
     def __init__(self, username, found_by, confidence):
@@ -11,5 +12,6 @@ class TargetPosts:
         self.homepage_url = homepage_url
 
     def get_response(self, url):
-        response = requests.get(url)
+        headers = {'User-Agent': get_random_user_agent()}
+        response = requests.get(url, headers=headers)
         return response

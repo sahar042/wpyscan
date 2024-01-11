@@ -1,5 +1,6 @@
 import requests
 import json
+from user_agents import get_random_user_agent
 
 class OembedApi:
     def __init__(self, api_url):
@@ -7,7 +8,9 @@ class OembedApi:
 
     def aggressive(self):
         try:
-            response = requests.get(self.api_url)
+            # response = requests.get(self.api_url)
+            headers = {'User-Agent': get_random_user_agent()}
+            response = requests.get(self.api_url, headers=headers)
             oembed_data = json.loads(response.text)
 
             if oembed_data:

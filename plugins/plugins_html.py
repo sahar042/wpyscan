@@ -3,10 +3,12 @@
 import re
 import requests
 from bs4 import BeautifulSoup
+from user_agents import get_random_user_agent
 
 def extract_plugins_from_html(url):
     try:
-        response = requests.get(url)
+        headers = {'User-Agent': get_random_user_agent()}
+        response = requests.get(url, headers=headers)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'html.parser')
             return extract_plugins_from_soup(soup)

@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from models.author_sitemap import UserSitemap
+from user_agents import get_random_user_agent
 
 class AuthorSitemap:
     def __init__(self, target):
@@ -34,7 +35,9 @@ class AuthorSitemap:
         return self.target.url('wp-sitemap-users-1.xml')
 
     def target_get(self, url):
-        return requests.get(url)
+        headers = {'User-Agent': get_random_user_agent()}
+        response = requests.get(url, headers=headers)
+        return response
 
     def extract_username(self, url):
         return url.split('/')[-2]

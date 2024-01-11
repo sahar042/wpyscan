@@ -2,9 +2,8 @@ import sys
 sys.dont_write_bytecode = True
 
 from wp_version.meta import extract_wordpress_version_meta
-from wp_version.stylesheet import extract_wordpress_version_from_source
+from wp_version.source_code import extract_wordpress_version_from_source
 from wp_version.readme import extract_wordpress_version_readme
-from wp_version.comments import extract_wordpress_version_comments
 from wp_version.rss import extract_wordpress_version_rss
 
 from findings.headers import Headers
@@ -67,10 +66,6 @@ def wp_version(website_url):
     if result is not None and extraction_method_used is None:
         wordpress_version, extraction_method_used = result
 
-    result = extract_wordpress_version_comments(website_url)
-    if result is not None and extraction_method_used is None:
-        wordpress_version, extraction_method_used = result
-
     result = extract_wordpress_version_rss(website_url)
     if result is not None and extraction_method_used is None:
         wordpress_version, extraction_method_used = result
@@ -85,12 +80,6 @@ def wp_version(website_url):
 
     result = extract_wordpress_version_readme(website_url)
     if extraction_method_used != "Readme (Passive Detection)":
-        
-        if result is not None and extraction_method_used != confirmation_method_used:
-            version_confirmation, confirmation_method_used = result
-
-    result = extract_wordpress_version_comments(website_url)
-    if extraction_method_used != "Comments (Passive Detection)":
         
         if result is not None and extraction_method_used != confirmation_method_used:
             version_confirmation, confirmation_method_used = result
@@ -381,8 +370,8 @@ def theme_version(website_url):
                 print(f"   [+] {data['name']}")
                 print(f"    |- Version: {data['version']} detected via Readme")
                 print(f"    |- Found By: Readme (Aggressive Detection)")
-                print(f"    |- Theme readme.txt: {website_url}/wp-content/plugins/{data['url']}/readme.txt")
-                print(f"    |- Theme location: {website_url}/wp-content/plugins/{data['url']}")
+                print(f"    |- Theme readme.txt: {website_url.rstrip('/')}/wp-content/plugins/{data['url']}/readme.txt")
+                print(f"    |- Theme location: {website_url.rstrip('/')}/wp-content/plugins/{data['url']}")
             elif data['version'] is not None:
                 print(f"{data['name']} - Version not found")
         if data['version'] == None:
@@ -432,8 +421,8 @@ def plugins_version(website_url):
                 print(f"   [+] {data['name']}")
                 print(f"    |- Version: {data['version']} detected via Readme")
                 print(f"    |- Found By: Readme (Aggressive Detection)")
-                print(f"    |- Plugin readme.txt: {website_url}/wp-content/plugins/{data['url']}/readme.txt")
-                print(f"    |- Plugin location: {website_url}/wp-content/plugins/{data['url']}")
+                print(f"    |- Plugin readme.txt: {website_url.rstrip('/')}/wp-content/plugins/{data['url']}/readme.txt")
+                print(f"    |- Plugin location: {website_url.rstrip('/')}/wp-content/plugins/{data['url']}")
                 print("")
             elif data['version'] is not None:
                 print(f"{data['name']} - Version not found")

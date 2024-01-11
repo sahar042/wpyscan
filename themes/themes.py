@@ -2,10 +2,13 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+from user_agents import get_random_user_agent
 
 def extract_installed_themes(url):
     try:
-        response = requests.get(url)
+        headers = {'User-Agent': get_random_user_agent()}
+        response = requests.get(url, headers=headers)
+        # response = requests.get(url)
         if response.status_code == 200 or response.status_code == 401 or response.status_code == 403 or response.status_code == 500:
             soup = BeautifulSoup(response.text, 'html.parser')
             stylesheet_links = soup.find_all('link', attrs={'rel': 'stylesheet'}) 

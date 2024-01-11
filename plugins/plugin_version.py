@@ -1,4 +1,5 @@
 import re, requests
+from user_agents import get_random_user_agent
 
 class PluginVersionExtractor:
     DEFAULT_CONFIDENCE = 40
@@ -18,8 +19,9 @@ class PluginVersionExtractor:
     def extract_info(self, plugin_name):
         search_url = f'{self.target_url.rstrip('/')}/wp-content/plugins/{plugin_name}/readme.txt'
         try:
-            response = requests.get(search_url)
-
+            # response = requests.get(search_url)
+            headers = {'User-Agent': get_random_user_agent()}
+            response = requests.get(search_url, headers=headers)
             # Check if the readme file exists
             if response.status_code == 200:
                 # print(f"Readme found for {plugin_name}")

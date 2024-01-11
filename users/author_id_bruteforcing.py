@@ -2,6 +2,7 @@ import re
 import requests
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
+from user_agents import get_random_user_agent
 
 class AuthorIdBruteForcing:
     def __init__(self, target):
@@ -49,7 +50,7 @@ class AuthorIdBruteForcing:
                 yield res, _id
 
     def get_and_follow_location(self, url):
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+        headers = {'User-Agent': get_random_user_agent()}
         response = requests.get(url, headers=headers, allow_redirects=True)
         return DummyResponse(response.status_code, response.text, response.url)
 
