@@ -15,7 +15,7 @@ sys.dont_write_bytecode = True
 if __name__ == "__main__":
 
     # TODO: Implement sys.argv for URL
-    website_url = "https://www.salaspectrum.com/" 
+    website_url = "https://web.murciaeduca.es/" 
 
     print("""
  _  _  ________        ______                   

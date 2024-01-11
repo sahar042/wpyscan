@@ -2,11 +2,10 @@ import sys
 sys.dont_write_bytecode = True
 
 from wp_version.meta import extract_wordpress_version_meta
-from wp_version.stylesheet import extract_wordpress_version_stylesheet
+from wp_version.stylesheet import extract_wordpress_version_from_source
 from wp_version.readme import extract_wordpress_version_readme
 from wp_version.comments import extract_wordpress_version_comments
 from wp_version.rss import extract_wordpress_version_rss
-from wp_version.atom import extract_wordpress_version_atom
 
 from findings.headers import Headers
 from findings.robots import Robots
@@ -49,33 +48,79 @@ from plugins.plugin_version import PluginVersionExtractor
 
 from vulnerabilities.wordpress import check_wordpress_vulnerabilities
 
-# Extract WP version via different methods.
-methods = [
-    extract_wordpress_version_meta,
-    extract_wordpress_version_stylesheet,
-    extract_wordpress_version_readme,
-    extract_wordpress_version_comments,
-    extract_wordpress_version_atom,
-    extract_wordpress_version_rss
-]
-
 def wp_version(website_url):
-    for method in methods:
-        result = method(website_url)
-        if result:
-            wordpress_version, method_used = result
+    wordpress_version = None
+    extraction_method_used = None
+    # Confirm the version with different methods
+    confirmation_method_used = None
+
+    # Try different extraction methods
+    result = extract_wordpress_version_meta(website_url)
+    if result is not None:
+        wordpress_version, extraction_method_used = result
+
+    result = extract_wordpress_version_from_source(website_url)
+    if result is not None and extraction_method_used is None:
+        wordpress_version, extraction_method_used = result
+
+    result = extract_wordpress_version_readme(website_url)
+    if result is not None and extraction_method_used is None:
+        wordpress_version, extraction_method_used = result
+
+    result = extract_wordpress_version_comments(website_url)
+    if result is not None and extraction_method_used is None:
+        wordpress_version, extraction_method_used = result
+
+    result = extract_wordpress_version_rss(website_url)
+    if result is not None and extraction_method_used is None:
+        wordpress_version, extraction_method_used = result
+
+
+
+    result = extract_wordpress_version_from_source(website_url)
+    if extraction_method_used != "Source Code (Passive Detection)":
+        
+        if result is not None and extraction_method_used != confirmation_method_used:
+            version_confirmation, confirmation_method_used = result
+
+    result = extract_wordpress_version_readme(website_url)
+    if extraction_method_used != "Readme (Passive Detection)":
+        
+        if result is not None and extraction_method_used != confirmation_method_used:
+            version_confirmation, confirmation_method_used = result
+
+    result = extract_wordpress_version_comments(website_url)
+    if extraction_method_used != "Comments (Passive Detection)":
+        
+        if result is not None and extraction_method_used != confirmation_method_used:
+            version_confirmation, confirmation_method_used = result
+
+    result = extract_wordpress_version_rss(website_url)
+    if extraction_method_used != "RSS (Passive Detection)":
+        
+        if result is not None and extraction_method_used != confirmation_method_used:
+            version_confirmation, confirmation_method_used = result
+
+    result = extract_wordpress_version_meta(website_url)
+    if extraction_method_used != "Meta Generator (Passive Detection)":
+        
+        if result is not None and extraction_method_used != confirmation_method_used:
+            version_confirmation, confirmation_method_used = result
+
+    if wordpress_version is not None:
+        if confirmation_method_used is not None:
+            if wordpress_version == version_confirmation:
+                print(f"[+] WordPress version {wordpress_version} identified.")
+                print(f" |- Found By: {extraction_method_used}")
+                print(f" |- Version {version_confirmation} confirmed by {confirmation_method_used}")
+            else:
+                print(f"[-] Version confirmation failed. Extracted version: {wordpress_version}")
+        else:
             print(f"[+] WordPress version {wordpress_version} identified.")
-            print(f" |- Found By: {method_used}")
-            methods.remove(method)
-            for method in methods:
-                version_confirmation_result = method(website_url)
-                if version_confirmation_result:
-                    version_confirmation, method_used = version_confirmation_result
-                    if wordpress_version == version_confirmation:
-                        print(f" |- Version {version_confirmation} confirmed by {method_used}")
-                        break
-            break 
-        check_wordpress_vulnerabilities(wordpress_version) 
+            print(f" |- Found By: {extraction_method_used}")
+            print("[-] Version not confirmed.")
+    else:
+        print("[-] WordPress version not identified.")
 
 #################################################################################################
 
@@ -316,12 +361,15 @@ def oembed_api(website_url):
 # Extract installed themes
 def themes(website_url):
     installed_themes = extract_installed_themes(website_url)
-    for theme in installed_themes:
-        name = theme['name']
-        if name not in found_themes:
-            found_themes.append(name.lower())
-    return installed_themes
-    # extract_version_css(installed_themes)
+    try:
+        for theme in installed_themes:
+            name = theme['name']
+            if name not in found_themes:
+                found_themes.append(name.lower())
+        return installed_themes
+        # extract_version_css(installed_themes)
+    except:
+        print("aaaaaaaaaaaaaaaaa")
 
 def theme_version(website_url):
     theme_version_extractor = ThemeVersionExtractor(website_url, found_themes)
@@ -335,12 +383,12 @@ def theme_version(website_url):
                 print(f"    |- Found By: Readme (Aggressive Detection)")
                 print(f"    |- Theme readme.txt: {website_url}/wp-content/plugins/{data['url']}/readme.txt")
                 print(f"    |- Theme location: {website_url}/wp-content/plugins/{data['url']}")
-                print("")
             elif data['version'] is not None:
                 print(f"{data['name']} - Version not found")
         if data['version'] == None:
             installed_themes = themes(website_url)
             extract_version_css(installed_themes)
+        print("")
 
 #################################################################################################
 
