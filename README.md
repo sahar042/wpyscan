@@ -38,3 +38,5 @@ A tool developed in Python for enumerating and scanning **WordPress** websites. 
 - Full Path Disclose
 - Upload directory listing
 - And much more... **AND FOR FREE WITH NO LIMITS**
+
+## Installation
