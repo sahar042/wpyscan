@@ -40,3 +40,6 @@ A tool developed in Python for enumerating and scanning **WordPress** websites. 
 - And much more... **AND FOR FREE WITH NO LIMITS**
 
 ## Installation
+## Usage
+## Modules
+## Donations
