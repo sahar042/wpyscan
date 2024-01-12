@@ -1,6 +1,6 @@
 import requests
 import json
-from user_agents import get_random_user_agent
+from avoidance.user_agents import get_random_user_agent
 
 class OembedApi:
     def __init__(self, api_url):

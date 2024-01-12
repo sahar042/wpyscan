@@ -2,7 +2,7 @@ import re
 import requests
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
-from user_agents import get_random_user_agent
+from avoidance.user_agents import get_random_user_agent
 
 class AuthorIdBruteForcing:
     def __init__(self, target):

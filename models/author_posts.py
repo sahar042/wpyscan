@@ -1,5 +1,5 @@
 import requests
-from user_agents import get_random_user_agent
+from avoidance.user_agents import get_random_user_agent
 
 class UserPosts:
     def __init__(self, username, found_by, confidence):

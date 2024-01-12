@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from models.author_sitemap import UserSitemap
-from user_agents import get_random_user_agent
+from avoidance.user_agents import get_random_user_agent
 
 class AuthorSitemap:
     def __init__(self, target):

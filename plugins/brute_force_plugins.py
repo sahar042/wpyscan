@@ -1,7 +1,7 @@
 # TODO: Implement plugins enumeration via Brute Force
 
 import requests
-from user_agents import get_random_user_agent
+from avoidance.user_agents import get_random_user_agent
 
 class PluginsBruteForce:
     def __init__(self, target_url, plugin_list_file):
@@ -37,5 +37,3 @@ class PluginsBruteForce:
             print(f"Error: Plugin list file not found - {self.plugin_list_file}")
         except Exception as e:
             print(f"Error: {e}")
-
-    

@@ -1,6 +1,6 @@
 import requests
 import re
-from user_agents import get_random_user_agent
+from avoidance.user_agents import get_random_user_agent
 
 def extract_wordpress_version_from_source(url):
     method = "Source Code (Passive Detection)"

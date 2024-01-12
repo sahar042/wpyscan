@@ -6,10 +6,12 @@ import requests
 class DbExport:
     def __init__(self, url):
         self.url = url
+        
 
 class KnownLocations:
-    def __init__(self, target):
+    def __init__(self, target, filename_list_file):
         self.target = target
+        self.filename_list_file = filename_list_file
 
     def valid_response_codes(self):
         return [200, 206]
@@ -38,28 +40,8 @@ class KnownLocations:
         urls = {}
         index = 0
 
-        possible_locations = [
-            'backup/db_export.zip',
-            'database_backup/export.sql',
-            'backup/dump.zip',
-            'db-backups/db_export.zip',
-            'db_backup/export.sql',
-            'backups/database.zip',
-            'sql_backups/db_export.zip',
-            'database-backup/export.sql',
-            'db-backup/db_export.zip',
-            'backup-files/export.sql',
-            'backup/db_backup.zip',
-            'sql_backup/db_export.zip',
-            'db-backups/export.sql',
-            'backups/db_dump.zip',
-            'db/backups/db_export.zip',
-            'backup/database_dump.sql',
-            'database/db_export.zip',
-            'sql-backups/export.sql',
-            'db-backup/db_dump.zip',
-            # Add more possible locations as needed
-        ]
+        with open(self.filename_list_file, 'r') as file:
+                possible_locations = file.read().splitlines()
 
         for path in possible_locations:
             path = path.strip()

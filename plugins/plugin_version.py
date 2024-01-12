@@ -1,5 +1,5 @@
 import re, requests
-from user_agents import get_random_user_agent
+from avoidance.user_agents import get_random_user_agent
 
 class PluginVersionExtractor:
     DEFAULT_CONFIDENCE = 40

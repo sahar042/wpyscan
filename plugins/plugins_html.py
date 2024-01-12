@@ -3,7 +3,7 @@
 import re
 import requests
 from bs4 import BeautifulSoup
-from user_agents import get_random_user_agent
+from avoidance.user_agents import get_random_user_agent
 
 def extract_plugins_from_html(url):
     try:

@@ -4,9 +4,9 @@ from scanner import wp_version, headers, robots, xml_rpc, readme, wp_mu_plugins,
     wp_cron, backup_db, debug_log, emergency_passwd_reset, full_path_disclosure, \
     registration, multisite, php_disabled, upload_directory_listing, upload_sql_dump, \
     duplicator_installer_log, tmm_db_migrate, known_filenames, known_locations, \
-    author_id_bruteforcing, author_post, author_sitemap, login_error_messages, \
-    oembed_api, themes, theme_version, plugins_html, plugins_homepage, plugins_version, \
-    plugins_brute_force \
+    author_id_bruteforcing, wp_json_api, author_post, author_sitemap, login_error_messages, \
+    oembed_api, themes_source, themes_brute_force, theme_info, plugins_html, \
+    plugins_homepage, plugins_version, plugins_brute_force \
     
 from scanner import usernames
 
@@ -15,7 +15,7 @@ sys.dont_write_bytecode = True
 if __name__ == "__main__":
 
     # TODO: Implement sys.argv for URL
-    website_url = "https://www.salaspectrum.com/" 
+    website_url = "http://www.salaspectrum.com/" 
 
     print("""
  _  _  ________        ______                   
@@ -73,7 +73,8 @@ if __name__ == "__main__":
             author_post,
             author_sitemap,
             login_error_messages,
-            oembed_api
+            oembed_api,
+            wp_json_api
         ]
         for func in functions_to_run:
             if func(website_url):
@@ -84,10 +85,16 @@ if __name__ == "__main__":
     print("\n THEMES ENUMERATION")
     print("+" + "-" * 50)
 
-    themes(website_url)
-    theme_version(website_url)
+    print("[+] Enumerating All Themes (via Passive and Aggressive Methods)")
+    themes_source(website_url)
 
-    print(" PLUGINS ENUMERATION")
+    print("[+] Brute Forcing Themes...")
+    themes_brute_force(website_url)
+
+    print("[+] Checking Theme Info (via Passive and Aggressive Methods)")
+    theme_info(website_url)
+
+    print("\n PLUGINS ENUMERATION")
     print("+" + "-" * 50)
 
     print("[+] Enumerating All Plugins (via Passive and Aggressive Methods)")
@@ -98,6 +105,9 @@ if __name__ == "__main__":
 
     print("[+] Checking Plugin Versions (via Passive and Aggressive Methods)")
     plugins_version(website_url)
+
+    print("[+] Other Interesting Findings")
+    plugins_homepage(website_url)
 
     # Use this to load data from which extract plugins info
     # plugins_homepage(website_url)

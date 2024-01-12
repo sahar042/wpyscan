@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-from user_agents import get_random_user_agent
+from avoidance.user_agents import get_random_user_agent
 
 class Plugin:
     def __init__(self, slug, confidence):

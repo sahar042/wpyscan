@@ -23,7 +23,6 @@ from findings.upload_directory_listing import UploadDirectoryListing
 from findings.upload_sql_dump import UploadSQLDump
 from findings.duplicator_installer_log import DuplicatorInstallerLog
 from findings.tmm_db_migrate import TmmDbMigrate
-
 from config_backups.known_filenames import KnownFilenames
 from db_exports.known_locations import KnownLocations
 
@@ -34,10 +33,13 @@ from users.author_sitemap import AuthorSitemap
 from models.author_sitemap import TargetSitemap
 from users.loggin_error_massages import TargetLogin, LoginErrorMessages
 from users.oembed_api import OembedApi
+from users.wp_json_api import WPJsonApi, WPJsonApiProxy
 
 from themes.found_themes import found_themes
-from themes.themes import extract_installed_themes, extract_version_css
-from themes.theme_version import ThemeVersionExtractor
+from themes.themes_source import extract_installed_themes
+from themes.theme_version_css import extract_version_css
+from themes.theme_info_readme import ThemeVersionExtractor
+from themes.brute_force_themes import ThemesBruteForce
 
 from plugins.found_plugins import found_plugins
 from plugins.plugins_html import extract_plugins_from_html
@@ -127,6 +129,7 @@ def robots(website_url):
         print(f"[+] robots.txt found: {robots_result}")
         print(" |- Found By: Robots Txt (Aggressive Detection)")
         print(" |- Confidence: 100%")
+    print("")
 
 def xml_rpc(website_url):
     xmlrpc_checker = XML_RPC(website_url)
@@ -278,7 +281,8 @@ def known_filenames(website_url):
         print("")
 
 def known_locations(website_url):
-    known_locations_checker = KnownLocations(website_url)
+    filename_list_file = "db_exports/possible_locations.txt"  # Replace with the path to your theme list file
+    known_locations_checker = KnownLocations(website_url, filename_list_file)
     known_locations_result = known_locations_checker.aggressive()
     if known_locations_result:
         print("[+] DB Exports Found:")
@@ -345,10 +349,25 @@ def oembed_api(website_url):
         oembed_api_finder.aggressive()
     except: pass
 
+def wp_json_api(website_url):
+    try:
+        api_url = f"{website_url.rstrip('/')}/wp-json/wp/v2/users"
+        wp_jason_api = WPJsonApi(api_url)
+        print("[+] Trying to enumerate users via WP JSON API...")
+        response = wp_jason_api.aggressive()
+        if response is None:
+            # print(f" |- Workaround URL failed, search manually: {website_url.rstrip('/')}/?rest_route=/wp/v2/users")
+            print("[+] Trying request using proxies...")
+            api_url = f"{website_url.rstrip('/')}/wp-json/wp/v2/users"
+            proxy_api = 'https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks5&timeout=10000&country=all&ssl=yes&anonymity=elite'
+            wp_api = WPJsonApiProxy(api_url, proxy_api=proxy_api)
+            wp_api.aggressive()
+    except:pass
+
 ##################################################################################################
 
 # Extract installed themes
-def themes(website_url):
+def themes_source(website_url):
     installed_themes = extract_installed_themes(website_url)
     try:
         for theme in installed_themes:
@@ -358,26 +377,36 @@ def themes(website_url):
         return installed_themes
         # extract_version_css(installed_themes)
     except:
-        print("aaaaaaaaaaaaaaaaa")
+        print("[+] No Themes Detected via homepage Source Code.")
 
-def theme_version(website_url):
-    theme_version_extractor = ThemeVersionExtractor(website_url, found_themes)
-    theme_version_extractor.extract_versions()
+def themes_brute_force(website_url):
+    theme_list_file = "themes/top_themes.txt"  # Replace with the path to your theme list file
+    theme_enumerator = ThemesBruteForce(website_url, theme_list_file)   
+    theme_names_list = theme_enumerator.enumerate_themes()
+    if theme_names_list:
+        # print("[+] themes Identified:")
+        for theme in theme_names_list:
+            # print(f" |- {theme}")
+            if theme not in found_themes:
+                found_themes.append(theme)
+
+def theme_info(website_url):
+    theme_info_extractor = ThemeVersionExtractor(website_url, found_themes)
+    theme_info_extractor.extract_versions()
     if found_themes:
         print(f"[+] Themes Detected")
-        for data in theme_version_extractor.info:
+        for data in theme_info_extractor.info:
             if 'version' in data and data['version'] is not None:
                 print(f"   [+] {data['name']}")
                 print(f"    |- Version: {data['version']} detected via Readme")
                 print(f"    |- Found By: Readme (Aggressive Detection)")
-                print(f"    |- Theme readme.txt: {website_url.rstrip('/')}/wp-content/plugins/{data['url']}/readme.txt")
-                print(f"    |- Theme location: {website_url.rstrip('/')}/wp-content/plugins/{data['url']}")
+                print(f"    |- Theme readme.txt: {website_url.rstrip('/')}/wp-content/themes/{data['url']}/readme.txt")
+                print(f"    |- Theme location: {website_url.rstrip('/')}/wp-content/themes/{data['url']}")
             elif data['version'] is not None:
                 print(f"{data['name']} - Version not found")
         if data['version'] == None:
-            installed_themes = themes(website_url)
+            installed_themes = themes_source(website_url)
             extract_version_css(installed_themes)
-        print("")
 
 #################################################################################################
 
@@ -406,7 +435,7 @@ def plugins_homepage(website_url):
     finder = UrlsInHomepageFinder(website_url)
     plugins = finder.passive()
     if plugins:
-        print("[+] Files related to plugins:")
+        print(" |- [+] Files related to plugins:")
         for plugin in plugins:
             print(f" - {plugin.slug} (confidence: {plugin.confidence})")
     print("")
@@ -432,3 +461,11 @@ def plugins_version(website_url):
 # check_wordpress_vulnerabilities(wordpress_version)
 
 print("\n")
+
+def test(website_url):
+    if response is None:
+        print(f" |- First URL failed, search manually: {website_url.rstrip('/')}/wp-json/wp/v2/users")
+        print("\n[+] Trying to enumerate users with a different REST API endpoint...")
+        api_url = f"{website_url.rstrip('/')}/?rest_route=/wp/v2/users"
+        wp_jason_api = WPJsonApi(api_url)
+        response = wp_jason_api.aggressive()

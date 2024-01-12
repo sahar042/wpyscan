@@ -16,9 +16,9 @@ class KnownFilenames:
 
         for filename in self.get_potential_filenames():
             url = urljoin(self.target, filename)
-            res = requests.get(url)
+            response = requests.get(url)
             
-            if res.status_code == 200 and re.search(r'define', res.text, re.I) and not re.search(r'<\s?html', res.text, re.I):
+            if 200 <= response.status_code < 300 and re.search(r'define', response.text, re.I) and not re.search(r'<\s?html', response.text, re.I):
                 found.append(ConfigBackup(url))
 
         return found
