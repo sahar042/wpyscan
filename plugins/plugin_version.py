@@ -17,7 +17,7 @@ class PluginVersionExtractor:
                 self.info.append({'url': plugin_name, 'name': info[1], 'version': info[0]})
         
     def extract_info(self, plugin_name):
-        search_url = f'{self.target_url.rstrip('/')}/wp-content/plugins/{plugin_name}/readme.txt'
+        search_url = f"{self.target_url.rstrip('/')}/wp-content/plugins/{plugin_name}/readme.txt"
         try:
             # response = requests.get(search_url)
             headers = {'User-Agent': get_random_user_agent()}

@@ -15,7 +15,7 @@ class PluginsBruteForce:
                 plugin_names = file.read().splitlines()
 
             for plugin_name in plugin_names:
-                plugin_url = f'{self.target_url.rstrip('/')}/wp-content/plugins/{plugin_name}'
+                plugin_url = f"{self.target_url.rstrip('/')}/wp-content/plugins/{plugin_name}"
                 # print(plugin_url)
                 # response = requests.get(plugin_url)
                 headers = {'User-Agent': get_random_user_agent()}
@@ -24,7 +24,7 @@ class PluginsBruteForce:
                     # print(f"Plugin found: {plugin_name} - URL: {plugin_url}")
                     plugin_names_list.append(plugin_name)
                 else:
-                    plugin_readme_url = f'{self.target_url.rstrip('/')}/wp-content/plugins/{plugin_name}/readme.txt'
+                    plugin_readme_url = f"{self.target_url.rstrip('/')}/wp-content/plugins/{plugin_name}/readme.txt"
                     # response = requests.get(plugin_readme_url)
                     headers = {'User-Agent': get_random_user_agent()}
                     response = requests.get(plugin_readme_url, headers=headers)

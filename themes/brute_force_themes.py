@@ -15,7 +15,7 @@ class ThemesBruteForce:
                 theme_names = file.read().splitlines()
 
             for theme_name in theme_names:
-                theme_url = f'{self.target_url.rstrip('/')}/wp-content/themes/{theme_name}'
+                theme_url = f"{self.target_url.rstrip('/')}/wp-content/themes/{theme_name}"
                 # print(theme_url)
                 # response = requests.get(theme_url)
                 headers = {'User-Agent': get_random_user_agent()}
@@ -24,7 +24,7 @@ class ThemesBruteForce:
                     # print(f"theme found: {theme_name} - URL: {theme_url}")
                     theme_names_list.append(theme_name)
                 else:
-                    theme_readme_url = f'{self.target_url.rstrip('/')}/wp-content/themes/{theme_name}/readme.txt'
+                    theme_readme_url = f"{self.target_url.rstrip('/')}/wp-content/themes/{theme_name}/readme.txt"
                     # response = requests.get(theme_readme_url)
                     headers = {'User-Agent': get_random_user_agent()}
                     response = requests.get(theme_readme_url, headers=headers)
