@@ -352,11 +352,9 @@ def wp_json_api(website_url):
     try:
         api_url = f"{website_url.rstrip('/')}/wp-json/wp/v2/users"
         wp_jason_api = WPJsonApi(api_url)
-        print("[+] Trying to enumerate users via WP JSON API...")
         response = wp_jason_api.aggressive()
         if response is None:
             # print(f" |- Workaround URL failed, search manually: {website_url.rstrip('/')}/?rest_route=/wp/v2/users")
-            print("[+] Trying request using proxies...")
             api_url = f"{website_url.rstrip('/')}/wp-json/wp/v2/users"
             proxy_api = 'https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks5&timeout=10000&country=all&ssl=yes&anonymity=elite'
             wp_api = WPJsonApiProxy(api_url, proxy_api=proxy_api)
@@ -369,16 +367,13 @@ def wp_json_api(website_url):
 # Extract installed themes
 def themes_source(website_url):
     installed_themes = extract_installed_themes(website_url)
-    try:
-        for theme in installed_themes:
-            name = theme['name']
-            if name not in found_themes:
-                found_themes.append(name.lower())
-        return installed_themes
-        # extract_version_css(installed_themes)
-    except:
-        print("[+] No Themes Detected via homepage Source Code.")
-
+    for theme in installed_themes:
+        name = theme['name']
+        if name not in found_themes:
+            found_themes.append(name.lower())
+    return installed_themes
+    # extract_version_css(installed_themes)
+    
 def themes_brute_force(website_url):
     theme_list_file = "themes/top_themes.txt"  # Replace with the path to your theme list file
     theme_enumerator = ThemesBruteForce(website_url, theme_list_file)   
@@ -394,7 +389,6 @@ def theme_info(website_url):
     theme_info_extractor = ThemeVersionExtractor(website_url, found_themes)
     theme_info_extractor.extract_versions()
     if found_themes:
-        print(f"[+] Themes Detected")
         for data in theme_info_extractor.info:
             if 'version' in data and data['version'] is not None:
                 print(f"   [+] {data['name']}")
@@ -409,6 +403,8 @@ def theme_info(website_url):
         if data['version'] == None:
             installed_themes = themes_source(website_url)
             extract_version_css(installed_themes)
+            check_theme_vulnerabilities(data['url'], data['version'])
+            print("")
 
 #################################################################################################
 
@@ -456,5 +452,6 @@ def plugins_version(website_url):
                 print(f"    |- Plugin location: {website_url.rstrip('/')}/wp-content/plugins/{data['url']}")
                 print("")
                 check_plugin_vulnerabilities(data['url'], data['version'])
+                print("")
             elif data['version'] is not None:
                 print(f"{data['name']} - Version not found")

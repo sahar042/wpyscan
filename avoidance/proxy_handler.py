@@ -1,6 +1,5 @@
 import requests
 import time
-import json
 from user_agents import get_random_user_agent
 
 class ProxyHandler:

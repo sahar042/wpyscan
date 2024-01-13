@@ -1,4 +1,4 @@
-from apis.wordfence_api import fetch_vulnerabilities
+from vulnerabilities_fetcher.wordfence_api import fetch_vulnerabilities
 
 def check_theme_vulnerabilities(name, version=None, software_type=None):
     if not name:
@@ -15,12 +15,14 @@ def check_theme_vulnerabilities(name, version=None, software_type=None):
                     name == software['slug'] and
                     (version is None or version_in_range(version, software['affected_versions']))
                 ):
-                    # print(f"Vulnerability ID: {vuln_id}")
                     print(f"    Title:      {details['title']}")
-                    # print(f"Description: {details['description']}")
                     print(f"    References: {', '.join(details['references'])}")
                     print(f"    CVE:        {details.get('cve', 'N/A')}")
-                    # print(f"CVSS: {details.get('cvss', 'N/A')}")
+                    # Add score and rating information
+                    score = details.get('cvss', {}).get('score', 'N/A')
+                    rating = details.get('cvss', {}).get('rating', 'N/A')
+                    print(f"    Score:      {score}")
+                    print(f"    Rating:     {rating}")
                     print(f"    Published:  {details.get('published', 'N/A')}")
                     print(f"    Updated:    {details.get('updated', 'N/A')}")
                     print("")
@@ -42,4 +44,3 @@ def version_in_range(input_version, affected_versions):
             return True
 
     return False
-

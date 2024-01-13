@@ -26,11 +26,6 @@ class WPJsonApi:
                         self.print_user_details(json_data)
                     else:
                         print("[-] No user details found in the WordPress JSON API response.")
-            else:
-                if "captcha" in response.text:
-                    print(f" |- Error: {response.status_code} - Possible CAPTCHA block.")
-                else:
-                    print(f" |- Error: {response.status_code}")
 
         except (json.JSONDecodeError, requests.RequestException) as e:
             pass
@@ -65,10 +60,8 @@ class WPJsonApiProxy:
             if response.status_code == 200:
                 return [self.parse_proxy_line(line) for line in response.text.strip().split('\n') if line.strip()]
             else:
-                print(f"Error fetching proxy information from API. Status code: {response.status_code}")
                 return []
         except requests.RequestException as e:
-            print(f"Error fetching proxy information from API: {e}")
             return []
 
     def parse_proxy_line(self, line):
@@ -94,7 +87,6 @@ class WPJsonApiProxy:
         polling_interval = 5  # seconds
 
         for proxy_info in self.proxy_list:
-            print(f" |- Trying with proxy: {proxy_info['host']}:{proxy_info['port']}")
             for attempt in range(1, max_retries + 1):
                 try:
                     session = self.get_requests_session(proxy_info)
@@ -102,7 +94,6 @@ class WPJsonApiProxy:
                     response = session.get(self.api_url, headers=headers)
 
                     if response.status_code == 202:
-                        print(f" |- Waiting for processing to complete. Attempt {attempt}/{max_retries}...")
                         for _ in range(max_polling_attempts):
                             time.sleep(polling_interval)
                             response = session.get(self.api_url, headers=headers)
@@ -119,21 +110,9 @@ class WPJsonApiProxy:
                             else:
                                 self.print_user_details(json_data)
                             return  # Exit the loop if successful
-                        else:
-                            print("[-] Empty response from the WordPress JSON API.")
-                            break
-                    else:
-                        if "captcha" in response.text:
-                            print(f" |- Error: {response.status_code} - Possible CAPTCHA block.")
-                        else:
-                            print(f" |- Error: {response.status_code}")
-                        break
 
                 except (json.JSONDecodeError, requests.RequestException) as e:
-                    print(f" |- Error: {e}")
                     break
-
-        print("[-] Failed to obtain a successful response with any proxy.")
 
     def print_user_details(self, json_data):
         try:
