@@ -34,7 +34,7 @@ class AuthorIdBruteForcing:
 
         urls = {}
 
-        for _id in opts.get('range', range(1, 10)):
+        for _id in opts.get('range', range(1, 300)):
             urls[urljoin(self.target, f"?author={_id}")] = _id
 
         return urls

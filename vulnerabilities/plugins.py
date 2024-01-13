@@ -1,19 +1,19 @@
 from apis.wordfence_api import fetch_vulnerabilities
 
-def check_wordpress_vulnerabilities(wordpress_version):
-    if not wordpress_version:
-        print("WordPress version not found.")
+def check_plugin_vulnerabilities(name, version=None, software_type=None):
+    if not name:
+        print("Name information not provided.")
         return
 
     vulnerabilities = fetch_vulnerabilities()
+    found_vulnerabilities = False
 
     if vulnerabilities:
         for vuln_id, details in vulnerabilities.items():
             for software in details['software']:
                 if (
-                    software['type'] == 'core' and
-                    software['name'] == 'WordPress' and
-                    version_in_range(wordpress_version, software['affected_versions'])
+                    name == software['slug'] and
+                    (version is None or version_in_range(version, software['affected_versions']))
                 ):
                     # print(f"Vulnerability ID: {vuln_id}")
                     print(f"    Title:      {details['title']}")
@@ -24,15 +24,20 @@ def check_wordpress_vulnerabilities(wordpress_version):
                     print(f"    Published:  {details.get('published', 'N/A')}")
                     print(f"    Updated:    {details.get('updated', 'N/A')}")
                     print("")
+                    found_vulnerabilities = True
+                    break
 
-def version_in_range(wordpress_version, affected_versions):
+        if not found_vulnerabilities:
+            print(f"   [-] {name}{' ' + version if version else ''} has no known vulnerabilities.")
+
+def version_in_range(input_version, affected_versions):
     for version, version_details in affected_versions.items():
-        from_version = version_details['from_version']
-        to_version = version_details['to_version']
+        from_version = version_details.get('from_version')
+        to_version = version_details.get('to_version')
 
         if (
-            (from_version == '*' or wordpress_version >= from_version) and
-            (to_version == '*' or wordpress_version <= to_version)
+            (from_version is None or (input_version and input_version >= from_version)) and
+            (to_version == '*' or (input_version and input_version <= to_version))
         ):
             return True
 

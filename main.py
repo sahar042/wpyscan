@@ -9,13 +9,12 @@ from scanner import wp_version, headers, robots, xml_rpc, readme, wp_mu_plugins,
     plugins_homepage, plugins_version, plugins_brute_force \
     
 from scanner import usernames
-
 sys.dont_write_bytecode = True
 
 if __name__ == "__main__":
 
     # TODO: Implement sys.argv for URL
-    website_url = "http://www.salaspectrum.com/" 
+    website_url = "http://ionueveuno.com/" 
 
     print("""
  _  _  ________        ______                   
@@ -31,9 +30,7 @@ if __name__ == "__main__":
     print(f"[+] Scanning:       {website_url}")
     print(f"[+] Time started:   {str(datetime.now())}\n")
 
-    wp_version(website_url)
-
-    print("\n INTERESTING FINDINGS")
+    print(" INTERESTING FINDINGS")
     print("+" + "-" * 50)
 
     # TODO: Filter functionality with sys.argv
@@ -58,6 +55,8 @@ if __name__ == "__main__":
     known_filenames(website_url)
     known_locations(website_url)
 
+    wp_version(website_url)
+
     print(" USERS ENUMERATION")
     print("+" + "-" * 50)
 
@@ -66,18 +65,19 @@ if __name__ == "__main__":
     # author_sitemap(website_url)
     # login_error_messages(website_url)
     # oembed_api(website_url)
+    # wp_json_api(website_url)
 
     def run_user_enumeration(website_url):
         functions_to_run = [
+            wp_json_api,
+            oembed_api,
             author_id_bruteforcing,
             author_post,
             author_sitemap,
-            login_error_messages,
-            oembed_api,
-            wp_json_api
+            login_error_messages
         ]
         for func in functions_to_run:
-            if func(website_url):
+            if func(website_url) is True:
                 break
 
     run_user_enumeration(website_url)
@@ -85,30 +85,18 @@ if __name__ == "__main__":
     print("\n THEMES ENUMERATION")
     print("+" + "-" * 50)
 
-    print("[+] Enumerating All Themes (via Passive and Aggressive Methods)")
     themes_source(website_url)
-
-    print("[+] Brute Forcing Themes...")
     themes_brute_force(website_url)
-
-    print("[+] Checking Theme Info (via Passive and Aggressive Methods)")
     theme_info(website_url)
 
     print("\n PLUGINS ENUMERATION")
     print("+" + "-" * 50)
 
-    print("[+] Enumerating All Plugins (via Passive and Aggressive Methods)")
     plugins_html(website_url)
-
-    print("[+] Brute Forcing Plugins...")
     plugins_brute_force(website_url)
-
-    print("[+] Checking Plugin Versions (via Passive and Aggressive Methods)")
     plugins_version(website_url)
 
-    print("[+] Other Interesting Findings")
-    plugins_homepage(website_url)
-
+    # print("[+] Other Interesting Findings")
     # Use this to load data from which extract plugins info
     # plugins_homepage(website_url)
     

@@ -48,6 +48,8 @@ from plugins.urls_in_homepage import UrlsInHomepageFinder
 from plugins.plugin_version import PluginVersionExtractor
 
 from vulnerabilities.wordpress import check_wordpress_vulnerabilities
+from vulnerabilities.theme import check_theme_vulnerabilities
+from vulnerabilities.plugins import check_plugin_vulnerabilities
 
 def wp_version(website_url):
     wordpress_version = None
@@ -57,44 +59,32 @@ def wp_version(website_url):
 
     # Try different extraction methods
     result = extract_wordpress_version_meta(website_url)
-    if result is not None:
+    if result is not None and extraction_method_used is None:
         wordpress_version, extraction_method_used = result
-
     result = extract_wordpress_version_from_source(website_url)
     if result is not None and extraction_method_used is None:
         wordpress_version, extraction_method_used = result
-
     result = extract_wordpress_version_readme(website_url)
     if result is not None and extraction_method_used is None:
         wordpress_version, extraction_method_used = result
-
     result = extract_wordpress_version_rss(website_url)
     if result is not None and extraction_method_used is None:
         wordpress_version, extraction_method_used = result
-
-
-
     result = extract_wordpress_version_from_source(website_url)
-    if extraction_method_used != "Source Code (Passive Detection)":
-        
+ 
+    if extraction_method_used != "Source Code (Passive Detection)":      
         if result is not None and extraction_method_used != confirmation_method_used:
             version_confirmation, confirmation_method_used = result
-
     result = extract_wordpress_version_readme(website_url)
-    if extraction_method_used != "Readme (Passive Detection)":
-        
+    if extraction_method_used != "Readme (Passive Detection)":       
         if result is not None and extraction_method_used != confirmation_method_used:
             version_confirmation, confirmation_method_used = result
-
     result = extract_wordpress_version_rss(website_url)
-    if extraction_method_used != "RSS (Passive Detection)":
-        
+    if extraction_method_used != "RSS (Passive Detection)":        
         if result is not None and extraction_method_used != confirmation_method_used:
             version_confirmation, confirmation_method_used = result
-
     result = extract_wordpress_version_meta(website_url)
-    if extraction_method_used != "Meta Generator (Passive Detection)":
-        
+    if extraction_method_used != "Meta Generator (Passive Detection)":       
         if result is not None and extraction_method_used != confirmation_method_used:
             version_confirmation, confirmation_method_used = result
 
@@ -104,6 +94,8 @@ def wp_version(website_url):
                 print(f"[+] WordPress version {wordpress_version} identified.")
                 print(f" |- Found By: {extraction_method_used}")
                 print(f" |- Version {version_confirmation} confirmed by {confirmation_method_used}")
+                print("")
+                check_wordpress_vulnerabilities(wordpress_version)
             else:
                 print(f"[-] Version confirmation failed. Extracted version: {wordpress_version}")
         else:
@@ -129,7 +121,7 @@ def robots(website_url):
         print(f"[+] robots.txt found: {robots_result}")
         print(" |- Found By: Robots Txt (Aggressive Detection)")
         print(" |- Confidence: 100%")
-    print("")
+        print("")
 
 def xml_rpc(website_url):
     xmlrpc_checker = XML_RPC(website_url)
@@ -138,7 +130,7 @@ def xml_rpc(website_url):
         print(f"[+] XML-RPC seems to be enabled: {website_url.rstrip('/')}/xmlrpc.php")
         for reference in xmlrpc_checker.get_references():
             print(f" |- {reference}")
-    print("")
+        print("")
 
 def readme(website_url):
     readme_checker = Readme(website_url)
@@ -217,7 +209,7 @@ def multisite(website_url):
     multisite_checker = Multisite(website_url)
     multisite_result = multisite_checker.aggressive()
     if multisite_result:
-        print(f"[+] Multisite found: {multisite_result['url']}")
+        print(f"[+] Registration link found: {multisite_result['url']}")
         print(f" |- Confidence: {multisite_result['confidence']}%")
         print(f" |- Found By: {multisite_result['found_by']}")
         print("")
@@ -290,6 +282,8 @@ def known_locations(website_url):
             print(f" - {db_export.url}")
         print("")
 
+###########################################################################################
+        
 # Extract usernames via different methods
 usernames = []
 
@@ -304,6 +298,7 @@ def author_id_bruteforcing(website_url):
                 print(f" |- User ID: {result['id']}")
                 print(f" |- Found By: {result['found_by']}")
                 print(f" |- Confidence: {result['confidence']}%")
+                return True
     except: pass
 
 def author_post(website_url):
@@ -317,6 +312,7 @@ def author_post(website_url):
                 print(f"[+] Username found: {result[0]}")
                 print(f" |- Found By: {result[1]}")
                 print(f" |- Confidence: {result[2]}%")
+                return True
             else:
                 usernames.append(result[0])
                 if usernames.count(result[0]) == 2:
@@ -331,6 +327,7 @@ def author_sitemap(website_url):
         results = author_sitemap_finder.aggressive()
         for user in results:
             print(f"Username: {user.username}, Found by: {user.found_by}, Confidence: {user.confidence}")
+            return True
     except: pass
 
 def login_error_messages(website_url):
@@ -340,6 +337,7 @@ def login_error_messages(website_url):
         results = login_error_messages_finder.aggressive()
         for user in results:
             print(f"Username: {user.username}, Found by: {user.found_by}, Confidence: {user.confidence}")
+            return True
     except: pass
 
 def oembed_api(website_url):
@@ -347,6 +345,7 @@ def oembed_api(website_url):
         api_url = f"{website_url.rstrip('/')}/wp-json/oembed/1.0/embed?url={website_url.rstrip('/')}&format=json"
         oembed_api_finder = OembedApi(api_url)
         oembed_api_finder.aggressive()
+        return True
     except: pass
 
 def wp_json_api(website_url):
@@ -362,6 +361,7 @@ def wp_json_api(website_url):
             proxy_api = 'https://api.proxyscrape.com/v2/?request=displayproxies&protocol=socks5&timeout=10000&country=all&ssl=yes&anonymity=elite'
             wp_api = WPJsonApiProxy(api_url, proxy_api=proxy_api)
             wp_api.aggressive()
+            return True
     except:pass
 
 ##################################################################################################
@@ -402,6 +402,8 @@ def theme_info(website_url):
                 print(f"    |- Found By: Readme (Aggressive Detection)")
                 print(f"    |- Theme readme.txt: {website_url.rstrip('/')}/wp-content/themes/{data['url']}/readme.txt")
                 print(f"    |- Theme location: {website_url.rstrip('/')}/wp-content/themes/{data['url']}")
+                check_theme_vulnerabilities(data['url'], data['version'])
+                print("")
             elif data['version'] is not None:
                 print(f"{data['name']} - Version not found")
         if data['version'] == None:
@@ -453,19 +455,6 @@ def plugins_version(website_url):
                 print(f"    |- Plugin readme.txt: {website_url.rstrip('/')}/wp-content/plugins/{data['url']}/readme.txt")
                 print(f"    |- Plugin location: {website_url.rstrip('/')}/wp-content/plugins/{data['url']}")
                 print("")
+                check_plugin_vulnerabilities(data['url'], data['version'])
             elif data['version'] is not None:
                 print(f"{data['name']} - Version not found")
-
-#################################################################################################
-
-# check_wordpress_vulnerabilities(wordpress_version)
-
-print("\n")
-
-def test(website_url):
-    if response is None:
-        print(f" |- First URL failed, search manually: {website_url.rstrip('/')}/wp-json/wp/v2/users")
-        print("\n[+] Trying to enumerate users with a different REST API endpoint...")
-        api_url = f"{website_url.rstrip('/')}/?rest_route=/wp/v2/users"
-        wp_jason_api = WPJsonApi(api_url)
-        response = wp_jason_api.aggressive()

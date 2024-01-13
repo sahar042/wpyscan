@@ -7,6 +7,7 @@ contact-form-7
 wp-super-cache
 elementor
 wpforms
+learnpress
 updraftplus
 all-in-one-seo-pack
 limit-login-attempts
@@ -14,6 +15,7 @@ advanced-custom-fields
 advanced-custom-fields-pro
 google-analytics-for-wordpress
 smush
+wp-compress-image-optimizer
 autoptimize
 wp-smtp
 really-simple-ssl

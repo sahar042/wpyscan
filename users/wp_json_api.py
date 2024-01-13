@@ -143,7 +143,7 @@ class WPJsonApiProxy:
             if username:
                 print(f" |- Author Name: {name}")
                 print(f" |- Username: {username}")
-                print(" |")
+                print("")
             else:
                 print("[-] No username found in the WordPress JSON API response.")
         except Exception as e:
