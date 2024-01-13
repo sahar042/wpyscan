@@ -10,7 +10,7 @@
 
 </div>
 
-A tool developed in Python for enumerating and scanning **WordPress** websites. It is an easy-to-use tool that can be run from the command line. **WPyScan** can enumerate and (soon) find any vulnerability associated with **version**, **theme** and **plugins** installed.
+A tool developed in Python for enumerating and scanning **WordPress** websites. It is an easy-to-use tool that can be run from the command line. **WPyScan** can enumerate and find any vulnerability associated with **version**, **theme** and **plugins** installed.
 
 ## Features
 - **FREE UNLIMITED** API queries
