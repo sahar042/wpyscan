@@ -1,4 +1,4 @@
-![WPyScan](wpyscan_banner.png)
+![WPyScan](/img/wpyscan_banner.png)
 ---
 <div align="center">
 
