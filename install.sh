@@ -1,5 +1,5 @@
 #!/bin/bash
-pip install requests urllib re bs4
+pip install requests urllib re beautifulsoup4
 
 cp -r wpyscan/ /usr/lib/wpyscan/
 cp wpyscan /usr/bin/
