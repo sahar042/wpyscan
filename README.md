@@ -22,6 +22,8 @@ A tool developed in Python for enumerating and scanning **WordPress** websites. 
 > [!NOTE]
 > **WPyScan has been launched but not thoroughly tested.** Please, open any issue you encounter and help improve the tool. The code is dirty and full of bad practices. I am not a developer but a hacker. If you want to contribute, you are welcome.
 
+![Screenshot](/img/screenshot_1.png)
+
 ## What can WPyScan check for?
 - The version of WordPress installed and any associated vulnerabilities
 - What plugins are installed and any associated vulnerabilities
