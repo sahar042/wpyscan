@@ -45,8 +45,9 @@ Clone the repo and get inside the folder:
 ```
 sudo git clone https://github.com/amtzespinosa/wpyscan.git
 cd wpyscan
+sudo chmod 777 install.sh
 ```
-Once inside, run the script `install.sh`. If you want to get rid of this amazing tool, just run `wpyscan-uninstall` anywhere.
+Then, run the script: `sudo ./install.sh`. If you want to get rid of this amazing tool, just run `wpyscan-uninstall` anywhere.
 
 ## Usage
 
