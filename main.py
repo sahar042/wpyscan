@@ -20,7 +20,6 @@ if __name__ == "__main__":
     website_url = args.url
 
     try:
-        # website_url = "https://www.inmotasa.es/" 
 
         print("""
  _  _  ________        ______                   
