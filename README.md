@@ -20,7 +20,7 @@ A tool developed in Python for enumerating and scanning **WordPress** websites. 
 - **Measures for CAPTCHA avoidance**
 
 > [!NOTE]
-> **WPyScan is under active development.** The project is also currently looking for people to contribute and help it grow. Any help is welcomed. **Documentation is being written as well, be patient.**
+> **WPyScan has been launched but not thoroughly tested.** Please, open any issue you encounter and help improve the tool. The code is dirty and full of bad practices. I am not a developer but a hacker. If you want to contribute, you are welcome.
 
 ## What can WPyScan check for?
 - The version of WordPress installed and any associated vulnerabilities
