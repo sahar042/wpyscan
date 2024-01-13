@@ -39,22 +39,12 @@ A tool developed in Python for enumerating and scanning **WordPress** websites. 
 - Upload directory listing
 - And much more... **AND FOR FREE WITH NO LIMITS**
 
-## Installation
-
-Clone the repo and get inside the folder:
-```
-sudo git clone https://github.com/amtzespinosa/wpyscan.git
-cd wpyscan
-sudo chmod 777 install.sh
-```
-Then, run the script: `sudo ./install.sh`. If you want to get rid of this amazing tool, just run `wpyscan-uninstall` anywhere.
-
 ## Usage
 
-By now, only simple use is available:
+By now, only simple use is available. Clone the repo, get inside the folder and:
 
 ```
-sudo wpyscan [URL]
+sudo python3 main.py -u [URL]
 ```
 
 URL format: https://example.com/
