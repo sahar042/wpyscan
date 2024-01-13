@@ -49,5 +49,18 @@ cd wpyscan
 Once inside, run the script `install.sh`. If you want to get rid of this amazing tool, just run `wpyscan-uninstall` anywhere.
 
 ## Usage
+
+By now, only simple use is available:
+
+```
+sudo wpyscan [URL]
+```
+
+URL format: https://example.com/
+
+> [!NOTE]
+> **Scan will take long.** Due to the many scans performed and the avoidance of security measures implemented by the websites, scans are slow. Be patient.
+
 ## Modules
-## Donations
+
+Documentation is on its way! 
