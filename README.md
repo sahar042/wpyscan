@@ -65,3 +65,11 @@ URL format: https://example.com/
 ## Modules
 
 Documentation is on its way! 
+
+# TODO
+- [ ] Test, test, test... and test!
+- [ ] Clean the code
+- [ ] Compile it in a tool, not just single scripts **(I am having troubles with this so any help will be welcome!)**
+- [ ] Polish all the modules and their execution
+- [ ] Make it more precise and reliable
+- [ ] And a few more things!
