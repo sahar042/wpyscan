@@ -1,4 +1,4 @@
-![WPyScan](/img/wpyscan_banner.png)
+![WPyScan](wpyscan_banner.png)
 ---
 <div align="center">
 
@@ -22,8 +22,6 @@ A tool developed in Python for enumerating and scanning **WordPress** websites. 
 > [!NOTE]
 > **WPyScan has been launched but not thoroughly tested.** Please, open any issue you encounter and help improve the tool. The code is dirty and full of bad practices. I am not a developer but a hacker. If you want to contribute, you are welcome.
 
-![Screenshot](/img/screenshot_1.png)
-
 ## What can WPyScan check for?
 - The version of WordPress installed and any associated vulnerabilities
 - What plugins are installed and any associated vulnerabilities
@@ -41,12 +39,22 @@ A tool developed in Python for enumerating and scanning **WordPress** websites. 
 - Upload directory listing
 - And much more... **AND FOR FREE WITH NO LIMITS**
 
+## Installation
+
+Clone the repo and get inside the folder:
+```
+sudo git clone https://github.com/amtzespinosa/wpyscan.git
+cd wpyscan
+sudo chmod 777 install.sh
+```
+Then, run the script: `sudo ./install.sh`. If you want to get rid of this amazing tool, just run `wpyscan-uninstall` anywhere.
+
 ## Usage
 
-By now, only simple use is available. Clone the repo, get inside the folder and:
+By now, only simple use is available:
 
 ```
-sudo python3 main.py -u [URL]
+sudo wpyscan [URL]
 ```
 
 URL format: https://example.com/
@@ -57,13 +65,3 @@ URL format: https://example.com/
 ## Modules
 
 Documentation is on its way! 
-
-## TODO
-
-- [ ] Test, test, test... and test!
-- [ ] Clean the code
-- [ ] Compile it in a tool, not just single scripts
-- [ ] Polish all the modules and their execution
-- [ ] Make it more precise and reliable
-- [ ] And a few more things!
-
