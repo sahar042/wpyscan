@@ -1,6 +1,3 @@
-# /wp-json/wp/v2/users
-# {"id":296,"name":"Bohdan Shila","url":"","description":"","link":"https:\/\/sinoficina.com\/author\/bohdan\/","slug":"bohdan","avatar_urls":{"24":"https:\/\/secure.gravatar.com\/avatar\/54a35f40eec767188d8e05c6da87ac82?s=24&d=mm&r=g","48":"https:\/\/secure.gravatar.com\/avatar\/54a35f40eec767188d8e05c6da87ac82?s=48&d=mm&r=g","96":"https:\/\/secure.gravatar.com\/avatar\/54a35f40eec767188d8e05c6da87ac82?s=96&d=mm&r=g"},"meta":[],"acf":[],"yoast_head":null,"yoast_head_json":null,"_links":{"self":[{"href":"https:\/\/sinoficina.com\/wp-json\/wp\/v2\/users\/296"}],"collection":[{"href":"https:\/\/sinoficina.com\/wp-json\/wp\/v2\/users"}]}}
-
 import requests, json, time
 from avoidance.user_agents import get_random_user_agent
 import urllib3
