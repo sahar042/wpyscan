@@ -1,4 +1,4 @@
-import sys
+import sys, os
 sys.dont_write_bytecode = True
 
 from wp_version.meta import extract_wordpress_version_meta
@@ -273,7 +273,7 @@ def known_filenames(website_url):
         print("")
 
 def known_locations(website_url):
-    filename_list_file = "db_exports/possible_locations.txt"  # Replace with the path to your theme list file
+    filename_list_file = "/usr/lib/wpyscan/db_exports/possible_locations.txt"  # Replace with the path to your theme list file
     known_locations_checker = KnownLocations(website_url, filename_list_file)
     known_locations_result = known_locations_checker.aggressive()
     if known_locations_result:
@@ -375,7 +375,7 @@ def themes_source(website_url):
     # extract_version_css(installed_themes)
     
 def themes_brute_force(website_url):
-    theme_list_file = "themes/top_themes.txt"  # Replace with the path to your theme list file
+    theme_list_file = "/usr/lib/wpyscan/themes/top_themes.txt"  # Replace with the path to your theme list file
     theme_enumerator = ThemesBruteForce(website_url, theme_list_file)   
     theme_names_list = theme_enumerator.enumerate_themes()
     if theme_names_list:
@@ -419,7 +419,7 @@ def plugins_html(website_url):
         print("[-] Failed to retrieve installed plugins via Passive Methods.")
 
 def plugins_brute_force(website_url):
-    plugin_list_file = "plugins/top_plugins.txt"  # Replace with the path to your plugin list file
+    plugin_list_file = "/usr/lib/wpyscan/plugins/top_plugins.txt"  # Replace with the path to your plugin list file
     plugin_enumerator = PluginsBruteForce(website_url, plugin_list_file)   
     plugin_names_list = plugin_enumerator.enumerate_plugins()
     if plugin_names_list:
