@@ -19,10 +19,8 @@ A tool developed in Python for enumerating and scanning **WordPress** websites. 
 - **WAF Bypass** with random user agents by default
 - **Measures for CAPTCHA avoidance**
 
-> **WARNING**
->
+> [!NOTE]
 > **WPyScan has been launched but not thoroughly tested.** Please, open any issue you encounter and help improve the tool. The code is dirty and full of bad practices. I am not a developer but a hacker. If you want to contribute, you are welcome.
-{: .prompt-warning }
 
 ![Screenshot](https://github.com/amtzespinosa/wpyscan/raw/main/img/screenshot_1.png)
 
@@ -52,10 +50,8 @@ sudo python3 main.py -u [URL]
 
 URL format: https://example.com/
 
-> **SCANS WILL TAKE LONG**
->
-> Due to the many scans performed and the avoidance of security measures implemented by the websites, scans are slow. Be patient.
-{: .prompt-warning }
+> [!NOTE]
+> **Scan will take long.** Due to the many scans performed and the avoidance of security measures implemented by the websites, scans are slow. Be patient.
 
 ## Modules
 Documentation is on its way! 
