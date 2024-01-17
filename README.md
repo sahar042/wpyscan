@@ -2,7 +2,7 @@
 ---
 <div align="center">
 
-![version](https://img.shields.io/badge/version-1.1.3-blue)
+![version](https://img.shields.io/badge/version-1.3.3-blue)
 ![build](https://img.shields.io/badge/build-passing-green)
 ![license](https://img.shields.io/badge/license-GPLv3-lightgrey)
 
@@ -20,7 +20,7 @@ A tool developed in Python for enumerating and scanning **WordPress** websites. 
 - **Measures for CAPTCHA avoidance**
 
 > [!NOTE]
-> **WPyScan has been launched but not thoroughly tested.** Please, open any issue you encounter and help improve the tool. The code is dirty and full of bad practices. I am not a developer but a hacker. If you want to contribute, you are welcome.
+> **WPyScan has been launched but not thoroughly tested.** Please, open any issue you encounter and help improve the tool. The code is dirty and full of bad practices. **I am not a developer but a hacker**. If you want to contribute, you are welcome.
 
 ![Screenshot](https://github.com/amtzespinosa/wpyscan/raw/main/img/screenshot_1.png)
 
@@ -52,6 +52,15 @@ sudo chmod +x install.sh
 Then, run the script: `sudo ./install.sh`. If you want to get rid of this amazing tool, just run `wpyscan-uninstall` anywhere.
 
 ## Usage
+
+### Windows
+
+> [!NOTE]
+> Still unsure about why but it works better on **Windows** rather that **Linux**. I am working on this but I would appreciate any help.
+
+Just run `setup.bat` file and all requirements will be installed. Then, just run `wpyscan.bat` and you'll be prompted to enter a WordPress URL, enter it and hit enter.
+
+### Ubuntu (buggy and unreliable)
 
 By now, only simple use is available:
 
