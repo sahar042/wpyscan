@@ -1,4 +1,0 @@
-#!/bin/bash
-
-sudo rm -rf /usr/lib/wpyscan
-sudo rm /usr/bin/wpyscan
